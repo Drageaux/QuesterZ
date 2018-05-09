@@ -1,0 +1,24 @@
+{
+  "name": "QuesterZ",
+  "scripts": {
+    "ng": "ng",
+    "start": "npm run build && node app.js",
+    "dev": "concurrently \"nodemon --exec \"\"node -r dotenv\\config\"\" app.js\" \"npm run serve\"",
+    "serve": "cd ionic-app && ionic serve --proxy-config proxy.conf.json",
+    "build-ios": "cd ionic-app && ionic cordova run ios",
+    "build-android": "cd ionic-app && ionic cordova run android"
+  },
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "mongoose": "^5.0.11"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1",
+    "dotenv": "^5.0.1",
+    "nodemon": "^1.17.2"
+  }
+}
