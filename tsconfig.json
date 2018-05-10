@@ -5,11 +5,14 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [
-      "dom",
-      "es2015"
+      "es2015",
+      "dom"
     ],
     "module": "es2015",
     "moduleResolution": "node",
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
     "sourceMap": true,
     "target": "es5"
   },
@@ -19,7 +22,8 @@
   "exclude": [
     "node_modules",
     "client/**/*.spec.ts",
-    "client/**/__tests__/*.ts"
+    "client/**/__tests__/*.ts",
+    "typings"
   ],
   "compileOnSave": false,
   "atom": {
