@@ -5,7 +5,7 @@
     "start": "npm run build && node app.js",
     "dev": "concurrently \"nodemon --exec \"\"node -r dotenv\\config\"\" app.js\" \"npm run serve\"",
     "serve": "cd ionic-app && npm run ionic:serve",
-    "build": "cd ionic-app && npm run ionic:build",
+    "build": "cd ionic-app && npm run build --prod --wwwDir ./www",
     "build-ios": "cd ionic-app && ionic cordova run ios",
     "build-android": "cd ionic-app && ionic cordova run android"
   },

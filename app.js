@@ -21,7 +21,7 @@ db.on('error', console.error.bind(console, '[DATABASE] MongoDB connection error:
 
 
 /** SERVE PUBLIC FILES */
-app.use('/', express.static(__dirname + '/dist'));
+app.use('/', express.static(__dirname + '/ionic-app/www'));
 
 /** API ENDPOINTS */
 // import the API controllers
