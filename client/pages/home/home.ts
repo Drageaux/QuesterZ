@@ -13,6 +13,7 @@ export class HomePage {
     map: any;
 
     constructor(public navCtrl: NavController, public geolocation: Geolocation) {
+        // Maps implementation: https://www.joshmorony.com/ionic-2-how-to-use-google-maps-geolocation-video-tutorial/
     }
 
     ionViewDidLoad() {
@@ -35,6 +36,32 @@ export class HomePage {
 
         }, (err) => {
             console.log(err);
+        });
+
+    }
+
+    addMarker() {
+
+        let marker = new google.maps.Marker({
+            map: this.map,
+            animation: google.maps.Animation.DROP,
+            position: this.map.getCenter()
+        });
+
+        let content = "<h4>Information!</h4>";
+
+        this.addInfoWindow(marker, content);
+
+    }
+
+    addInfoWindow(marker, content) {
+
+        let infoWindow = new google.maps.InfoWindow({
+            content: content
+        });
+
+        google.maps.event.addListener(marker, 'click', () => {
+            infoWindow.open(this.map, marker);
         });
 
     }
