@@ -5,6 +5,7 @@
 /dist-server
 /tmp
 /out-tsc
+/www
 
 # dependencies
 /node_modules
@@ -27,6 +28,10 @@
 
 # misc
 /.sass-cache
+/.tmp
+/.versions
+/.idea
+/.sourcemaps
 /connect.lock
 /coverage
 /libpeerconnection.log

@@ -4,13 +4,14 @@
     ".git",
     "node_modules/**/node_modules",
     "client/",
-    "dist/"
+    "dist/",
+    "www/"
   ],
   "execMap": {
     "js": "node"
   },
   "watch": [
-    "routes/",
+    "server/",
     "app.js"
   ],
   "env": {

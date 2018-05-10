@@ -25,7 +25,7 @@ app.use('/', express.static(__dirname + '/ionic-app/www'));
 
 /** API ENDPOINTS */
 // import the API controllers
-var sampleRouter = require('./routes/sampleRouter');
+var sampleRouter = require('./server/routes/sampleRouter');
 // register controllers for endpoints
 router.use('/sample', sampleRouter);//Api for devices
 // any route starting with '/api' will be interfacing our API
