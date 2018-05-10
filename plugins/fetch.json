@@ -8,5 +8,17 @@
     "variables": {
       "API_KEY_FOR_IOS": "AIzaSyA9Tb4O5x2sWdmrKydL5xkrwu2onmfNKNA"
     }
+  },
+  "cordova-plugin-ionic": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-ionic@^4.1.7"
+    },
+    "is_top_level": true,
+    "variables": {
+      "APP_ID": "3dbd2628",
+      "CHANNEL_NAME": "Production",
+      "UPDATE_METHOD": "background"
+    }
   }
 }
