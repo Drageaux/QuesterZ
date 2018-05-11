@@ -25,6 +25,14 @@ export class HomePage {
     }
 
     ionViewDidEnter() {
+        this.loadMap();
+    }
+
+
+    /****************************
+     * GOOGLE MAPS API HANDLERS *
+     ****************************/
+    loadMap(){
         this.geolocation
             .getCurrentPosition()
             .then((position) => {
@@ -40,6 +48,7 @@ export class HomePage {
                 this.directionsDisplay.setMap(this.map);
                 this.placesService = new google.maps.places.PlacesService(this.map);
 
+                // begin search
                 this.placesService.nearbySearch({
                     location: this.myLatLng,
                     radius: '500',
@@ -76,6 +85,7 @@ export class HomePage {
                 this.infoWindow.setContent(result.name);
                 this.infoWindow.open(this.map, marker);
             });
+            this.calcRoute(place);
         });
     }
 
@@ -91,10 +101,15 @@ export class HomePage {
         this.directionsService.route(request, (response, status) => {
             if (status == 'OK') {
                 this.directionsDisplay.setDirections(response);
+                console.log(response);
             }
         });
     }
 
+
+    /**************
+     * NAVIGATION *
+     **************/
     pushPageDirections() {
         this.navCtrl.push(this.directionsPage);
     }
