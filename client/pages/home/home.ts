@@ -19,6 +19,7 @@ export class HomePage {
     directionsService = new google.maps.DirectionsService();
     directionsDisplay = new google.maps.DirectionsRenderer();
     infoWindow = new google.maps.InfoWindow();
+    infoContent = '';
 
     constructor(public navCtrl: NavController,
                 public geolocation: Geolocation) {
@@ -32,7 +33,7 @@ export class HomePage {
     /****************************
      * GOOGLE MAPS API HANDLERS *
      ****************************/
-    loadMap(){
+    loadMap() {
         this.geolocation
             .getCurrentPosition()
             .then((position) => {
@@ -55,7 +56,7 @@ export class HomePage {
                     type: ['restaurant']
                 }, (results, status) => {
                     if (status == google.maps.places.PlacesServiceStatus.OK) {
-                        for (let i = 0; i < results.length; i++) {
+                        for (let i = 0; i < 5; i++) { // stop at 5 requests for now
                             let place = results[i];
                             this.createMarker(place);
                         }
@@ -82,14 +83,19 @@ export class HomePage {
                     console.error(status);
                     return;
                 }
-                this.infoWindow.setContent(result.name);
+
+                this.infoContent = ` 
+                    <h4>` + result.name + `</h4>
+                    <p>` + result.adr_address + `</p><br>
+                `;
+                this.infoWindow.setContent(this.infoContent);
                 this.infoWindow.open(this.map, marker);
             });
             this.calcRoute(place);
         });
     }
 
-    calcRoute(place){
+    calcRoute(place) {
         let request = {
             origin: this.myLatLng,
             destination: place.geometry.location,
@@ -101,7 +107,6 @@ export class HomePage {
         this.directionsService.route(request, (response, status) => {
             if (status == 'OK') {
                 this.directionsDisplay.setDirections(response);
-                console.log(response);
             }
         });
     }
