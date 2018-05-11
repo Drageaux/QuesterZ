@@ -3,13 +3,12 @@
     <ion-title>
       Home
     </ion-title>
-    <ion-buttons end>
-      <button ion-button (click)="addMarker()"><ion-icon name="add">&nbsp;</ion-icon>Add Marker</button>
-    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <div #map id="map"></div>
+  <h2>Welcome to QuesterZ!</h2>
+  <ion-buttons>
+    <button ion-button (click)="pushPageDirections()">Directions</button>
+  </ion-buttons>
 </ion-content>

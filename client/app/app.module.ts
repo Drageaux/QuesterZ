@@ -11,6 +11,7 @@ import {TabsPage} from '../pages/tabs/tabs';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {Geolocation} from '@ionic-native/geolocation';
+import {DirectionsPage} from "../pages/directions/directions";
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import {Geolocation} from '@ionic-native/geolocation';
         HomePage,
         AboutPage,
         ContactPage,
-        TabsPage
+        TabsPage,
+        DirectionsPage
     ],
     imports: [
         BrowserModule,
@@ -30,7 +32,8 @@ import {Geolocation} from '@ionic-native/geolocation';
         HomePage,
         AboutPage,
         ContactPage,
-        TabsPage
+        TabsPage,
+        DirectionsPage
     ],
     providers: [
         StatusBar,

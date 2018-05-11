@@ -1,6 +1,6 @@
-import {Component, ElementRef, ViewChild} from "@angular/core";
+import {Component} from "@angular/core";
 import {NavController} from "ionic-angular";
-import {Geolocation} from '@ionic-native/geolocation';
+import {DirectionsPage} from "../directions/directions";
 
 declare var google;
 
@@ -9,60 +9,39 @@ declare var google;
     templateUrl: 'home.html'
 })
 export class HomePage {
-    @ViewChild('map') mapElement: ElementRef;
-    map: any;
 
-    constructor(public navCtrl: NavController, public geolocation: Geolocation) {
-        // Maps implementation: https://www.joshmorony.com/ionic-2-how-to-use-google-maps-geolocation-video-tutorial/
+    directionsPage = DirectionsPage;
+
+    constructor(public navCtrl: NavController) {
+
+        // Distance Matrix API
+        let origin1 = new google.maps.LatLng(55.930385, -3.118425);
+        let origin2 = 'Greenwich, England';
+        let destinationA = 'Stockholm, Sweden';
+        let destinationB = new google.maps.LatLng(50.087692, 14.421150);
+
+        let service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix(
+            {
+                origins: [origin1, origin2],
+                destinations: [destinationA, destinationB],
+                travelMode: 'DRIVING',
+                // transitOptions: TransitOptions,
+                // drivingOptions: DrivingOptions,
+                // unitSystem: UnitSystem,
+                avoidHighways: true,
+                avoidTolls: true
+            }, this.callback);
     }
 
-    ionViewDidLoad() {
-        this.loadMap();
+    callback(response, status) {
+        // See Parsing the Results for
+        // the basics of a callback function.
+        console.log(response)
     }
 
-    loadMap() {
-
-        this.geolocation.getCurrentPosition().then((position) => {
-
-            let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-            let mapOptions = {
-                center: latLng,
-                zoom: 15,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-
-            this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-
-        }, (err) => {
-            console.log(err);
-        });
-
-    }
-
-    addMarker() {
-
-        let marker = new google.maps.Marker({
-            map: this.map,
-            animation: google.maps.Animation.DROP,
-            position: this.map.getCenter()
-        });
-
-        let content = "<h4>Information!</h4>";
-
-        this.addInfoWindow(marker, content);
-
-    }
-
-    addInfoWindow(marker, content) {
-
-        let infoWindow = new google.maps.InfoWindow({
-            content: content
-        });
-
-        google.maps.event.addListener(marker, 'click', () => {
-            infoWindow.open(this.map, marker);
-        });
-
+    pushPageDirections() {
+        this.navCtrl.push(this.directionsPage);
     }
 }
+
