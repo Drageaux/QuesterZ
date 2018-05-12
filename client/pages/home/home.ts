@@ -13,11 +13,13 @@ export class HomePage {
     directionsPage = DirectionsPage;
 
     @ViewChild('map') mapElement: ElementRef;
+    @ViewChild('myAddress') addressInputElement: ElementRef;
     myLatLng: any = null;
     map: any;
     placesService: any;
     directionsService = new google.maps.DirectionsService();
     directionsDisplay = new google.maps.DirectionsRenderer();
+    markers: any[] = [];
     infoWindow = new google.maps.InfoWindow();
     infoContent = '';
 
@@ -40,29 +42,62 @@ export class HomePage {
                 this.myLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 let mapOptions = {
                     center: this.myLatLng,
-                    zoom: 15,
+                    zoom: 20,
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
                 this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-
                 // bind services to map
                 this.directionsDisplay.setMap(this.map);
                 this.placesService = new google.maps.places.PlacesService(this.map);
 
-                // begin search
-                this.placesService.nearbySearch({
-                    location: this.myLatLng,
-                    radius: '500',
-                    type: ['restaurant']
-                }, (results, status) => {
-                    if (status == google.maps.places.PlacesServiceStatus.OK) {
-                        for (let i = 0; i < 5; i++) { // stop at 5 requests for now
-                            let place = results[i];
-                            this.createMarker(place);
-                        }
-                    }
-                })
+                // add SearchBox
+                let searchBox = new google.maps.places.SearchBox(this.addressInputElement);
+                this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.addressInputElement);
+                // bias the SearchBox results towards current map's viewport
+                this.map.addListener('bounds_changed', () => {
+                    searchBox.setBounds(this.map.getBounds());
+                });
+
+                searchBox.addListener('places_changed', () => {
+                    this.searchNearbyPlaces(searchBox);
+
+                    // clear old markers
+                    this.markers.forEach(function (marker) {
+                        marker.setMap(null);
+                    });
+                    this.markers = [];
+                });
+
+                // search with geolocation first
+                this.searchNearbyPlaces(searchBox);
+
+
             }, (err) => console.log(err));
+    }
+
+    searchNearbyPlaces(searchBox: any): void {
+        if (searchBox) {
+            // search with searchBox's address
+            let places = searchBox.getPlaces();
+            for (let i = 0; i < 5; i++) { // stop at 5 requests for now
+                let place = places[i];
+                this.createMarker(place);
+            }
+        } else {
+            // search with geolocation
+            this.placesService.nearbySearch({
+                location: this.myLatLng,
+                radius: '500',
+                type: ['restaurant']
+            }, (results, status) => {
+                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    for (let i = 0; i < 5; i++) { // stop at 5 requests for now
+                        let place = results[i];
+                        this.createMarker(place);
+                    }
+                }
+            });
+        }
     }
 
     createMarker(place) {
@@ -109,6 +144,11 @@ export class HomePage {
                 this.directionsDisplay.setDirections(response);
             }
         });
+    }
+
+
+    changeMyAddress(addr: string) {
+
     }
 
 

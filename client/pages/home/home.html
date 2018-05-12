@@ -8,8 +8,13 @@
 
 <ion-content padding>
   <h2>Welcome to QuesterZ!</h2>
+  <!--<ion-buttons>-->
+    <!--<button ion-button (click)="pushPageDirections()">Directions</button>-->
+  <!--</ion-buttons>-->
+  <label>My Address</label>
+  <input id="my-address" type="text" name="address" #myAddress>
   <ion-buttons>
-    <button ion-button (click)="pushPageDirections()">Directions</button>
+    <button ion-button (click)="changeMyAddress(myAddress)">Submit</button>
   </ion-buttons>
   <div #map id="map"></div>
 </ion-content>
