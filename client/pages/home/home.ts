@@ -13,7 +13,7 @@ export class HomePage {
     directionsPage = DirectionsPage;
 
     @ViewChild('map') mapElement: ElementRef;
-    myLatLng: any = null;
+    myPosition: any = null;
     map: any;
     placesService: any;
     directionsService = new google.maps.DirectionsService();
@@ -38,9 +38,9 @@ export class HomePage {
         this.geolocation
             .getCurrentPosition()
             .then((position) => {
-                this.myLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                this.myPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 let mapOptions = {
-                    center: this.myLatLng,
+                    center: this.myPosition,
                     zoom: 15,
                     mapTypeId: google.maps.MapTypeId.ROADMAP,
                     mapTypeControl: false,
@@ -80,8 +80,7 @@ export class HomePage {
                 return;
             }
             let newPlace = places[0];
-            let newPosition = newPlace.geometry.location;
-            this.myLatLng = new google.maps.LatLng(newPosition.lat, newPosition.lng);
+            this.myPosition = newPlace.geometry.location;
 
             // recenter the map
             let bounds = new google.maps.LatLngBounds();
@@ -90,6 +89,7 @@ export class HomePage {
             } else {
                 bounds.extend(newPlace.geometry.location);
             }
+            this.map.fitBounds(bounds);
             // repopulate markers
             this.searchNearby();
         }
@@ -101,9 +101,16 @@ export class HomePage {
             marker.setMap(null);
         });
         this.markers = [];
+        // create a marker for myPosition
+        let marker = new google.maps.Marker({
+            map: this.map,
+            position: this.myPosition
+        });
+        this.markers.push(marker);
+
         // search with geolocation
         this.placesService.nearbySearch({
-            location: this.myLatLng,
+            location: this.myPosition,
             radius: '500',
             type: ['restaurant']
         }, (results, status) => {
@@ -150,7 +157,7 @@ export class HomePage {
 
     calcRoute(place) {
         let request = {
-            origin: this.myLatLng,
+            origin: this.myPosition,
             destination: place.geometry.location,
             // Note that Javascript allows us to access the constant
             // using square brackets and a string value as its
