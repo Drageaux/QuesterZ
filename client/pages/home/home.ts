@@ -104,12 +104,10 @@ export class HomePage {
         // search with geolocation
         this.placesService.nearbySearch({
             location: this.myLatLng,
-            radius: '3000',
+            radius: '500',
             type: ['restaurant']
         }, (results, status) => {
-
             if (status == google.maps.places.PlacesServiceStatus.OK) {
-                console.log(this.markers, this.myLatLng)
                 for (let i = 0; i < results.length; i++) {
                     let place = results[i];
                     this.createMarker(place);
