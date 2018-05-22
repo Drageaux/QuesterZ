@@ -2,6 +2,7 @@ import {Component, ElementRef, ViewChild} from "@angular/core";
 import {NavController} from "ionic-angular";
 import {DirectionsPage} from "../directions/directions";
 import {Geolocation} from "@ionic-native/geolocation";
+import {ApiService} from "../../services/api.service";
 
 declare var google;
 
@@ -23,7 +24,8 @@ export class HomePage {
     infoContent = '';
 
     constructor(public navCtrl: NavController,
-                public geolocation: Geolocation) {
+                public geolocation: Geolocation,
+                private apiService: ApiService) {
     }
 
     ionViewDidEnter() {
@@ -169,6 +171,17 @@ export class HomePage {
                 this.directionsDisplay.setDirections(response);
             }
         });
+    }
+
+
+    /****************
+     * DATA PARSERS *
+     ****************/
+    registerMyLocation() {
+        console.log(this.myPosition);
+        let lat = this.myPosition.lat(),
+            lng = this.myPosition.lng();
+        this.apiService.addLocationToUser(lat, lng);
     }
 
 
