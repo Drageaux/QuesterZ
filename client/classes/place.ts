@@ -1,8 +1,8 @@
 export class Place {
-    constructor(public id,
-                public name,
-                public address,
-                public type,
-                public point) {
+    constructor(public id: string,
+                public name: string,
+                public address: string,
+                public type: string,
+                public point: any) {
     }
 }
