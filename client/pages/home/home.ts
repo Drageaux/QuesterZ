@@ -3,6 +3,7 @@ import {NavController} from "ionic-angular";
 import {DirectionsPage} from "../directions/directions";
 import {Geolocation} from "@ionic-native/geolocation";
 import {ApiService} from "../../services/api.service";
+import {Place} from "../../classes/place";
 
 declare var google;
 
@@ -14,7 +15,7 @@ export class HomePage {
     directionsPage = DirectionsPage;
 
     @ViewChild('map') mapElement: ElementRef;
-    myPosition: any = null;
+    myPosition: Place = null;
     map: any;
     placesService: any;
     directionsService = new google.maps.DirectionsService();
@@ -40,9 +41,10 @@ export class HomePage {
         this.geolocation
             .getCurrentPosition()
             .then((position) => {
-                this.myPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                this.myPosition = new Place('', '', '', '',
+                    new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
                 let mapOptions = {
-                    center: this.myPosition,
+                    center: this.myPosition.point,
                     zoom: 15,
                     mapTypeId: google.maps.MapTypeId.ROADMAP,
                     mapTypeControl: false,
@@ -82,7 +84,16 @@ export class HomePage {
                 return;
             }
             let newPlace = places[0];
-            this.myPosition = newPlace.geometry.location;
+            this.myPosition = new Place(
+                newPlace.id,
+                newPlace.name,
+                newPlace.formatted_address,
+                null,
+                new google.maps.LatLng(
+                    newPlace.geometry.location.lat(),
+                    newPlace.geometry.location.lng()
+                )
+            );
 
             // recenter the map
             let bounds = new google.maps.LatLngBounds();
@@ -106,13 +117,13 @@ export class HomePage {
         // create a marker for myPosition
         let marker = new google.maps.Marker({
             map: this.map,
-            position: this.myPosition
+            position: this.myPosition.point
         });
         this.markers.push(marker);
 
         // search with geolocation
         this.placesService.nearbySearch({
-            location: this.myPosition,
+            location: this.myPosition.point,
             radius: '500',
             type: ['restaurant']
         }, (results, status) => {
@@ -159,7 +170,7 @@ export class HomePage {
 
     calcRoute(place) {
         let request = {
-            origin: this.myPosition,
+            origin: this.myPosition.point,
             destination: place.geometry.location,
             // Note that Javascript allows us to access the constant
             // using square brackets and a string value as its
@@ -178,10 +189,7 @@ export class HomePage {
      * DATA PARSERS *
      ****************/
     registerMyLocation() {
-        console.log(this.myPosition);
-        let lat = this.myPosition.lat(),
-            lng = this.myPosition.lng();
-        this.apiService.addLocationToUser(lat, lng);
+        this.apiService.addLocationToUser(this.myPosition);
     }
 
 
