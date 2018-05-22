@@ -1,12 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Location = require('./location.model');
+var Place = require('./place.model');
 
 var UserSchema = new Schema({
   userId: String,
   name: String,
-  location: Location
+  place: place
 });
 
 module.exports = mongoose.model('User', UserSchema);
